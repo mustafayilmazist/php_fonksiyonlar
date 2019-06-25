@@ -1,89 +1,68 @@
 <?php 
 
-/**
-* [turkceKarakterTemizle türkçe karakterleri ingilizceye dönüştür boşlukları ise - ye dönüştür]
-* @param  [type] $param [string]
-* @return [type]        [string]
-*/
-function turkceKarakterTemizle($param){
-
-	$tr = array("ç","Ç","ğ","Ğ","İ","ı","ü","Ü","ö","Ö","ş","Ş");
-	$ing = array("c","C","g","G","I","i","u","U","o","O","s","S");
-	return str_replace($tr, $ing, $param);
-
-}
-
-/**
-* [uniqidUret zaman damgası, rastgele sayı ve benzersiz bir unigiid üretir.]
-* @return [type] [benzersiz kimlik]
-*/
-function uniqidUret(){
-	$zaman = time();
-	$rastgeleSayi = rand(1,10000);
-	$unigiId = uniqid(); 
-	$kimlik = $unigiId;
-	$kimlik = $zaman."".$rastgeleSayi."".$unigiId;
-	return $kimlik;
-}
-
-/**
- * [yeniAdOlustur -> dosya adında büyük A-Z küçük a-z ve rakam dışında bulunan tüm karakterleri temizleyip boşlukları - yapar. ve dosyanın adına benzersiz bir ıd değeri atar.]
- * @param  [type] $text [metodun aldığı parametre]
- * @return [type]       [$yeni temizlenmiş olan değer]
- */
-function seoUrlOlustur($text)
+function post()
 {
-	$tr = array('Ç', 'Ş', 'Ğ', 'Ü', 'İ', 'Ö', 'ç', 'ş', 'ğ', 'ü', 'ö', 'ı', '+', '#');
-	$ing = array('c', 's', 'g', 'u', 'i', 'o', 'c', 's', 'g', 'u', 'o', 'i', '', '');
+	if ($_POST) {
+		return true;
+	}else{
+		return false;
+	}
+}
+function get()
+{
+	if ($_GET) {
+		return true;
+	}else{
+		return false;
+	}
+}
+function p($deger){
+	if (isset($_POST[$deger])) {
+		return trim($_POST[$deger]);
+	}
+	return false;
+}
+function g($deger){
+	if (isset($_GET[$deger])) {
+		return trim($_GET[$deger]);
+	}
+	return false;
+}
+function redirect($url,$time=0){
+	if ($time==0) {
+		header("location:$url");
+	}else{
+		$time=(int)$time;
+		header("refresh:$time;$url");
+	}
+}
+function seoUrlOlustur($text){
+	$tr=["Ç","Ş","Ğ","Ü","İ","Ö","ç","ş","ğ","ü","ı","ö","+","#"];
+	$ing = ["C","S","G","U","I","O","c","s","g","u","i","o","",""];
 	$text = strtolower(str_replace($tr, $ing, $text));
-	$text = preg_replace("@[^A-Za-z0-9\-_\.\+]@i", ' ', $text);
-	$text = trim(preg_replace('/\s+/', ' ', $text));
-	$text = str_replace(' ', '-', $text);
+	$text = preg_replace("@[\.+]@", "", $text);
+	$text = preg_replace("@[^A-Za-z0-9\-_\+]@", " ", $text);
+	$text = trim(preg_replace('/\s+/', " ", $text));
+	$text= str_replace(" ", "-", $text);
 	return $text;
 }
-function pisset(){
-	if ( $_POST ) {
-		return true;
-	}else{
-		return false;
-	}
-}
-function gisset(){
-	if ( $_GET ) {
-		return true;
-	}else{
-		return false;
-	}
-}
-function post($value){
-	if (isset($_POST[$value])) {
-		return (trim($_POST[$value]));
-	}else{
-		return false;
-	}
-}
-
-function get($value){
-	if (isset($_GET[$value])) {
-		return (trim($_GET[$value]));
-	}else{
-		return false;
-	}
-}
-
-function git($value){
-	header("location:$value");
-	exit();
-}
-
-function sureliGit($url,$sure=1){
-	header("refresh:$sure;$url");
-}
-
-function pr($arr){
+function pr($dizi){
 	echo "<pre>";
-	print_r($arr);
+	print_r($dizi);
 	echo "</pre>";
+}
+
+function base_url($param=""){
+	return BASEURL."".$param;
+}
+
+function cokluResimYuklemeVerisiOlustur($name,$i){
+	$dizi["name"]=$_FILES[$name]["name"][$i];
+	$dizi["type"]=$_FILES[$name]["type"][$i];
+	$dizi["tmp_name"]=$_FILES[$name]["tmp_name"][$i];
+	$dizi["error"]=$_FILES[$name]["error"][$i];
+	$dizi["size"]=$_FILES[$name]["size"][$i];
+	return $dizi;
 }
 
 

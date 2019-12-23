@@ -112,3 +112,29 @@ function etiketKapat($html) {
 	return $html;
 } 
 
+
+function session($isim,$deger=""){
+	if ( trim($deger)=="" ){
+		if (isset($_SESSION[$isim])){
+			return $_SESSION[$isim];
+		}
+		return false;
+	}else{
+		$_SESSION[$isim]=$deger;
+		return true;
+	}
+}
+function sessionSil($isim)
+{
+	if (is_array($isim)) {
+		foreach ($isim as $name) {
+			if (isset($_SESSION[$name])) {
+				unset($_SESSION[$name]);
+			}
+		}
+	}else{
+		if (isset($_SESSION[$isim])) {
+			unset($_SESSION[$isim]);
+		}
+	}
+}
